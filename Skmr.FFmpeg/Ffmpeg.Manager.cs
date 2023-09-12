@@ -4,13 +4,13 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor
+namespace Skmr.FFmpeg
 {
-    public partial class Ffmpeg
+    public partial class FFmpeg
     {
         public class Manager
         {
-            public static Ffmpeg Ffmpeg { get; set; } = new Ffmpeg();
+            public static FFmpeg Ffmpeg { get; set; } = new FFmpeg();
         }
     }
 }

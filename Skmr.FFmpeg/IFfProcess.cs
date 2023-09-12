@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Skmr.Editor
+namespace Skmr.FFmpeg
 {
     public interface IFfProcess
     {

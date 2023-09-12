@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Skmr.Editor
+namespace Skmr.FFmpeg
 {
     internal class FfProbe : IFfProcess
     {

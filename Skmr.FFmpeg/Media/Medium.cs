@@ -2,10 +2,10 @@
 using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Text;
-using static Skmr.Editor.Ffmpeg;
+using static Skmr.FFmpeg.FFmpeg;
 using io = System.IO;
 
-namespace Skmr.Editor.Media
+namespace Skmr.FFmpeg.Media
 {
     public class Medium: IEquatable<Medium>, ICloneable
     {

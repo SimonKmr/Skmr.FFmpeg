@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Skmr.Editor
+namespace Skmr.FFmpeg
 {
-    public partial class Ffmpeg
+    public partial class FFmpeg
     {
         public class Format
         {

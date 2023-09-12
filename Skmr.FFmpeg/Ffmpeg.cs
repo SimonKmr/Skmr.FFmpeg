@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
-namespace Skmr.Editor
+namespace Skmr.FFmpeg
 {
-    public partial class Ffmpeg : IFfProcess
+    public partial class FFmpeg : IFfProcess
     {
+        public static readonly FFmpeg Instance = new FFmpeg();
+
         public Process Process { get; private set; }
         public string Executable { get; set; }
 
@@ -40,12 +42,12 @@ namespace Skmr.Editor
             return sb.ToString();
         }
         
-        public Ffmpeg() 
+        public FFmpeg() 
         {
             string ffmpegPath = Environment.GetEnvironmentVariable("ffmpeg", EnvironmentVariableTarget.User) + "\\ffmpeg.exe";
             Executable = ffmpegPath ?? throw new Exception("environment variable \"ffmpeg\" not set");
         }
-        public Ffmpeg(string executable)
+        public FFmpeg(string executable)
         {
             Executable = executable;
         }
