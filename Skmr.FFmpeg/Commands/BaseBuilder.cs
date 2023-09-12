@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 namespace Skmr.FFmpeg.Commands
 {
-    public class FilterVideo
+    public abstract class BaseBuilder
     {
+        public const string TimeFormat = @"hh\:mm\:ss\.\0";
+        internal StringBuilder commandBuilder = new StringBuilder();
     }
 }

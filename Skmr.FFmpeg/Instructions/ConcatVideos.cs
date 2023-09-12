@@ -1,92 +1,74 @@
-﻿using Skmr.Editor.Commands;
-using Skmr.Editor.Media;
+﻿using Skmr.FFmpeg.Commands;
+using Skmr.FFmpeg.Media;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Skmr.Editor.Instructions
+namespace Skmr.FFmpeg.Instructions
 {
-    public class ConcatVideos : IInstruction<ConcatVideos>
+    public class ConcatVideos
     {
-        public Info Info { get; } = new Info();
-        public void Execute2()
-        {
-
-        }
-
-        public void Run()
+        public void Concat(Medium[] inputs, Medium output)
         {
             switch (Method)
             {
                 case ConcatMethod.Protocol:
-                    Protocol();
+                    Protocol(inputs, output);
                     break;
                 case ConcatMethod.Filter:
-                    Filter();
+                    Filter(inputs, output);
                     break;
                 case ConcatMethod.Demuxer:
-                    Demuxer();
+                    Demuxer(inputs, output);
                     break;
             };
         }
 
-        private void Filter()
+        private void Filter(Medium[] inputs, Medium output)
         {
             //https://stackoverflow.com/a/11175851
             var command = new CommandBuilder();
 
-            for (int i = 0; i < Info.Inputs.Length; i++) 
-                command.Input(Info.Inputs[i].ToString());
+            for (int i = 0; i < inputs.Length; i++) 
+                command.Input(inputs[i].ToString());
             
             command.Custom("-filter_complex \"");
 
-            for (int i = 0; i < Info.Inputs.Length; i++)
+            for (int i = 0; i < inputs.Length; i++)
                 command.Custom($"[{i}:v] [{i}:a]");
             command.Custom($"concat=n={2}:v={VideoTracks}:a={AudioTracks} [v] [a]\" ");
 
             command.Map("\"[v]\"");
             command.Map("\"[a]\"");
-            command.Output($"{Info.Outputs[0]}");
+            command.Output($"{output}");
 
-            Info.Ffmpeg.Run(command);
+            FFmpeg.Instance.Run(command);
         }
 
-        private void Protocol()
+        private void Protocol(Medium[] inputs, Medium output)
         {
-            var output = Info.Outputs[0].ToString();
             var command = new CommandBuilder();
 
             command.Custom($"-i \"concat:");
 
-            for (int i = 0; i < Info.Inputs.Length; i++)
+            for (int i = 0; i < inputs.Length; i++)
             {
-                command.Custom(Info.Inputs[i].ToString());
-                if (i < Info.Inputs.Length - 1) command.Custom("|");
+                command.Custom(inputs[i].ToString());
+                if (i < inputs.Length - 1) command.Custom("|");
             }
 
             command
-                .VCodec(VideoCodec.Copy)
-                .ACodec(AudioCodec.Copy)
-                .Output(Info.Outputs[0].ToString());
+                .Codec(VideoCodec.Copy)
+                .Codec(AudioCodec.Copy)
+                .Output(output.ToString());
 
-            Info.Ffmpeg.Run(command);
+            FFmpeg.Instance.Run(command);
         }
 
-        private void Demuxer()
+        private void Demuxer(Medium[] inputs, Medium output)
         {
             throw new NotImplementedException();
-        }
-
-        public ConcatVideos Input(Medium medium)
-        {
-            Info.Inputs = Info.Inputs.Concat(new Medium[] { medium }).ToArray();
-            return this;
-        }
-        public ConcatVideos Output(Medium medium)
-        {
-            Info.Outputs = Info.Outputs.Concat(new Medium[] { medium }).ToArray();
-            return this;
         }
 
 
@@ -96,6 +78,7 @@ namespace Skmr.Editor.Instructions
             AudioTracks = audioTracks;
             Method = concatMethod;
         }
+
         public int VideoTracks { get; }
         public int AudioTracks { get; }
         public ConcatMethod Method { get; }

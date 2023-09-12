@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.Commands
+namespace Skmr.FFmpeg.Commands
 {
     public class VideoCodec
     {
@@ -20,6 +20,6 @@ namespace Skmr.Editor.Commands
         }
 
         public static VideoCodec Copy => new VideoCodec("copy");
-        public static VideoCodec Libx264() => new VideoCodec("libx264");
+        public static VideoCodec Libx264 => new VideoCodec("libx264");
     }
 }

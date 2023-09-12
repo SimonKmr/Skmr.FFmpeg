@@ -4,13 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.Commands
+namespace Skmr.FFmpeg.Commands
 {
-    public class CommandBuilder
+    public class CommandBuilder : BaseBuilder
     {
-        public const string TimeFormat = @"hh\:mm\:ss\.\0";
-        private StringBuilder commandBuilder = new StringBuilder();
-
         public CommandBuilder Custom(string str)
         {
             commandBuilder.Append($"{str} ");
@@ -23,10 +20,24 @@ namespace Skmr.Editor.Commands
         }
 
         #region I/O
+
+        private int inputs = 0;
         public CommandBuilder Input(string file)
         {
             commandBuilder.Append($"-i {file} ");
+            inputs++;
             return this;
+        }
+
+        public int GetInputs()
+        {
+            return inputs;
+        }
+
+        public CommandBuilder Input(string file, out Node medium)
+        {
+            medium = new Node(inputs);
+            return Input(file);
         }
 
         public CommandBuilder Output(string file)
@@ -43,13 +54,13 @@ namespace Skmr.Editor.Commands
             return this;
         }
 
-        public CommandBuilder VCodec(VideoCodec codec)
+        public CommandBuilder Codec(VideoCodec codec)
         {
             commandBuilder.Append($"-c:v {codec} ");
             return this;
         }
 
-        public CommandBuilder ACodec(AudioCodec codec)
+        public CommandBuilder Codec(AudioCodec codec)
         {
             commandBuilder.Append($"-c:a {codec} ");
             return this;
@@ -64,6 +75,18 @@ namespace Skmr.Editor.Commands
         public CommandBuilder NoAudio()
         {
             commandBuilder.Append($"-na ");
+            return this;
+        }
+
+        public CommandBuilder PixelFormat(string format)
+        {
+            commandBuilder.Append($"-pix_fmt {format} ");
+            return this;
+        }
+
+        public CommandBuilder ConstantRateFactor(int range)
+        {
+            commandBuilder.Append($"-crf {range} ");
             return this;
         }
 
@@ -90,6 +113,14 @@ namespace Skmr.Editor.Commands
         public CommandBuilder To(TimeSpan time)
         {
             commandBuilder.Append($"-to {time.ToString(TimeFormat)} ");
+            return this;
+        }
+        #endregion
+
+        #region Filter
+
+        public CommandBuilder Filter( FilterBuilder filter)
+        {
             return this;
         }
         #endregion

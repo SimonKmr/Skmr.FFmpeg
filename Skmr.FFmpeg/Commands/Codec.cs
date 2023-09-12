@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Skmr.Editor.Commands
+namespace Skmr.FFmpeg.Commands
 {
     public class Codec
     {

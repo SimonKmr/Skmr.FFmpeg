@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace Skmr.FFmpeg.Commands
 {
-    public static class FFMpegExtention
+    public class BaseFilter
     {
-        public static void Run(this FFmpeg ffmpeg, CommandBuilder command)
+        protected string str;
+        public override string ToString()
         {
-            ffmpeg.Run(command.ToString());
+            return str;
         }
     }
 }
